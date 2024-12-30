@@ -17,6 +17,9 @@ COPY start.sh .
 COPY wait-for.sh .
 COPY db/migration ./migration
 
+RUN chmod +x /app/start.sh /app/wait-for.sh
+RUN apk add --no-cache ca-certificates
+
 EXPOSE 8081
 
 ENTRYPOINT [ "/app/start.sh" ]
