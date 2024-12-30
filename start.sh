@@ -3,8 +3,8 @@
 set -e 
 
 echo "run db migrations"
-source app.env
+source /app/app.env
 /app/migrate -path /app/migration -database "$DB_SOURCE" -verbose up
 
-echo "start app"
+echo "start the app"
 /app/main
