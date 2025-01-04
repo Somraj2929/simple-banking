@@ -51,10 +51,11 @@ jobs:
         chmod +x aws-iam-authenticator
         sudo mv aws-iam-authenticator /usr/local/bin
 
-    - name: Set environment variables for aws-iam-authenticator
+    - name: Create AWS config file for aws-iam-authenticator
       run: |
-        export AWS_IAM_AUTHENTICATOR_ENABLED=true
-        export AWS_IAM_AUTHENTICATOR_A3_ARN=$(aws sts get-caller-identity --query Arn | cut -d'/' -f 1,2,3)
+        mkdir -p ~/.aws
+        echo "[default]" > ~/.aws/config
+        echo "aws_iam_authenticator_enable = true" >> ~/.aws/config
 
     - name: Update Kubernetes configuration
       run: |
