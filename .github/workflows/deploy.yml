@@ -45,17 +45,18 @@ jobs:
         echo "Pushing Docker image to ECR..."
         docker push -a $REGISTRY/$REPOSITORY
     
-    - name: Check AWS IAM Role
-      run: aws sts get-caller-identity
 
     - name: Update Kubernetes configuration
       run: |
         echo "Updating Kubernetes configuration..."
         aws eks update-kubeconfig --name simple-banking --region us-east-1
-
+    
+    - name: Verify kubectl context
+      run: kubectl config current-context
+          
     - name: Deploy to Amazon EKS
       run: |
-            kubectl apply -f eks/aws-auth.yaml
+            kubectl apply -f eks/aws-auth.yaml --validate=false
             kubectl apply -f eks/deployment.yaml
             kubectl apply -f eks/service.yaml
             kubectl apply -f eks/issuer.yaml
