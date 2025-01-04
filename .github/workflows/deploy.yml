@@ -3,12 +3,10 @@ name: Deploy to Production
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
 
-  build:
+  deploy:
     name: Build Image
     runs-on: ubuntu-latest
 
@@ -46,19 +44,6 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
         echo "Pushing Docker image to ECR..."
         docker push -a $REGISTRY/$REPOSITORY
-
-    - name: Update Kubernetes configuration
-      run: |
-        echo "Updating Kubernetes configuration..."
-        aws eks update-kubeconfig --name simple-banking --region us-east-1
-
-    - name: Get ConfigMap
-      run: |
-        kubectl get configmap aws-auth -n kube-system -o yaml
-
-    - name: Check cluster access
-      run: |
-        kubectl get nodes
            
     - name: Deploy to Amazon EKS
       run: |
