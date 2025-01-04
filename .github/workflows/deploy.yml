@@ -46,15 +46,20 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
         echo "Pushing Docker image to ECR..."
         docker push -a $REGISTRY/$REPOSITORY
-    
-
-    - name: Get AWS Credentials
-      run: cat ~/.aws/credentials
 
     - name: Update Kubernetes configuration
       run: |
         echo "Updating Kubernetes configuration..."
         aws eks update-kubeconfig --name simple-banking --region us-east-1
+
+    - name: Apply aws-auth ConfigMap
+      run: |
+        echo "Applying aws-auth.yaml..."
+        kubectl apply -f eks/aws-auth.yaml
+
+    - name: Get ConfigMap
+      run: |
+        kubectl get configmap aws-auth -n kube-system -o yaml
     
     - name: Verify kubectl context
       run: kubectl config current-context
