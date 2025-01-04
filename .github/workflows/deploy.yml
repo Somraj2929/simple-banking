@@ -52,23 +52,14 @@ jobs:
         echo "Updating Kubernetes configuration..."
         aws eks update-kubeconfig --name simple-banking --region us-east-1
 
-    - name: Apply aws-auth ConfigMap
-      run: |
-        echo "Applying aws-auth.yaml..."
-        kubectl apply -f eks/aws-auth.yaml --validate=false
-
     - name: Get ConfigMap
       run: |
         kubectl get configmap aws-auth -n kube-system -o yaml
-    
-    - name: Verify kubectl context
-      run: kubectl config current-context
 
     - name: Check cluster access
       run: |
         kubectl get nodes
-    
-          
+           
     - name: Deploy to Amazon EKS
       run: |
             kubectl apply -f eks/aws-auth.yaml
