@@ -44,6 +44,9 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
         echo "Pushing Docker image to ECR..."
         docker push -a $REGISTRY/$REPOSITORY
+    
+    - name: Check AWS IAM Role
+      run: aws sts get-caller-identity
 
     - name: Update Kubernetes configuration
       run: |
