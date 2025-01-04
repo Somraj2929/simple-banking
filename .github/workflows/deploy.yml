@@ -6,7 +6,7 @@ on:
 
 jobs:
 
-  deploy:
+  build:
     name: Build Image
     runs-on: ubuntu-latest
 
@@ -45,6 +45,9 @@ jobs:
         echo "Pushing Docker image to ECR..."
         docker push -a $REGISTRY/$REPOSITORY
     
+
+    - name: Get AWS Credentials
+      run: cat ~/.aws/credentials
 
     - name: Update Kubernetes configuration
       run: |
