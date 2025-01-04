@@ -48,7 +48,7 @@ jobs:
     - name: Update Kubernetes configuration
       run: |
         echo "Updating Kubernetes configuration..."
-        aws eks update-kubeconfig --name simple-banking-eks --region us-east-1
+        aws eks update-kubeconfig --name simple-banking --region us-east-1
 
     - name: Deploy to Amazon EKS
       run: |
