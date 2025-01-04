@@ -44,32 +44,7 @@ jobs:
         docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG -t $REGISTRY/$REPOSITORY:latest .
         echo "Pushing Docker image to ECR..."
         docker push -a $REGISTRY/$REPOSITORY
-    
-    - name: Install aws-iam-authenticator
-      run: |
-        curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.29.0/2023-10-11/bin/linux/amd64/aws-iam-authenticator
-        chmod +x aws-iam-authenticator
-        sudo mv aws-iam-authenticator /usr/local/bin
-
-    - name: Create AWS config file for aws-iam-authenticator
-      run: |
-        mkdir -p ~/.aws
-        echo "[default]" > ~/.aws/config
-        echo "aws_iam_authenticator_enable = true" >> ~/.aws/config
-
-    - name: Update Kubernetes configuration
-      run: |
-        echo "Updating Kubernetes configuration..."
-        aws eks update-kubeconfig --name simple-banking --region us-east-1
-    
-    - name: Verify kubectl context
-      run: kubectl config current-context
-
-    - name: Check cluster access
-      run: |
-        kubectl get nodes
-    
-          
+           
     - name: Deploy to Amazon EKS
       run: |
             kubectl apply -f eks/aws-auth.yaml
