@@ -51,6 +51,11 @@ jobs:
         chmod +x aws-iam-authenticator
         sudo mv aws-iam-authenticator /usr/local/bin
 
+    - name: Set environment variables for aws-iam-authenticator
+      run: |
+        export AWS_IAM_AUTHENTICATOR_ENABLED=true
+        export AWS_IAM_AUTHENTICATOR_A3_ARN=$(aws sts get-caller-identity --query Arn | cut -d'/' -f 1,2,3)
+
     - name: Update Kubernetes configuration
       run: |
         echo "Updating Kubernetes configuration..."
@@ -66,7 +71,7 @@ jobs:
           
     - name: Deploy to Amazon EKS
       run: |
-            kubectl apply -f eks/aws-auth.yaml --validate=false
+            kubectl apply -f eks/aws-auth.yaml
             kubectl apply -f eks/deployment.yaml
             kubectl apply -f eks/service.yaml
             kubectl apply -f eks/issuer.yaml
