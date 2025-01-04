@@ -55,7 +55,7 @@ jobs:
     - name: Apply aws-auth ConfigMap
       run: |
         echo "Applying aws-auth.yaml..."
-        kubectl apply -f eks/aws-auth.yaml
+        kubectl apply -f eks/aws-auth.yaml --validate=false
 
     - name: Get ConfigMap
       run: |
